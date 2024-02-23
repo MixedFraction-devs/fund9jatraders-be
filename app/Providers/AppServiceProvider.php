@@ -2,6 +2,9 @@
 
 namespace App\Providers;
 
+use App\Services\Webhook\Drivers\CryptomusWebhookDriver;
+use App\Services\Webhook\Drivers\PaystackWebhookDriver;
+use App\Services\Webhook\Webhook;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,13 +23,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-    );
-
-    /**
-     * Register webhook drivers
-     */
-    Webhook::driver('paystack', PaystackWebhookDriver::class);
-    Webhook::driver('zilla', ZillaWebhookDriver::class);
+        /**
+         * Register webhook drivers
+         */
+        Webhook::driver('paystack', PaystackWebhookDriver::class);
+        Webhook::driver('cryptomus', CryptomusWebhookDriver::class);
 
         Http::macro('cryptomus', function ($sign) {
             return Http::baseUrl(
