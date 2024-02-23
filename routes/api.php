@@ -46,6 +46,6 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 
 Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
-    Route::post('create/{type}', [OrderController::class, 'store']);
+    Route::post('cryptomus/{type}', [OrderController::class, 'cryptomus'])->whereIn('type', ['one', 'two', 'three']);
     Route::get('{order}', [OrderController::class, 'show']);
 });

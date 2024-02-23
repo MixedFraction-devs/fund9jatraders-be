@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreOrderRequest;
 use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\ProductOne;
@@ -12,6 +11,12 @@ use App\Models\User;
 use App\Notifications\ProductLowStockNotification;
 use App\Notifications\ProductPurchaseNotification;
 use App\Settings\PlatformSettings;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -20,6 +25,9 @@ class OrderController extends Controller
      */
     public function index()
     {
+        /**
+         * @var User
+         */
         $user = auth()->user();
         $orders = $user->orders()->get();
 
@@ -28,29 +36,57 @@ class OrderController extends Controller
         ]);
     }
 
+    public function cryptomus(Request $request, string $type)
+    {
+        /**
+         * @var User
+         */
+        $user = $request->user();
+        /**
+         * @var PlatformSettings
+         */
+        $settings = app(PlatformSettings::class);
+        $amount = $type ==  "one" ? $settings->product_one_price : ($type == "two" ? $settings->product_two_price : $settings->product_three_price);
+
+        $body = [
+            'order_id' => Str::uuid(),
+            'amount' => round($amount / 100, 2),
+            'currency' => 'USD',
+            'subtract' => 100,
+            'url_callback' => config('services.cryptomus.webhook_url')
+        ];
+
+        $sign = md5(base64_encode(json_encode($body)) . config('services.cryptomus.key'));
+
+        $response = Http::cryptomus($sign)->post('payment', $body);
+
+        if ($response->successful()) {
+            Cache::store('database')->put('cryptomus-' . $body['order_id'], [
+                'amount' => $request->amount * 100,
+                'currency' => 'USD',
+                'user_id' => $user->id,
+                'type' => $request->type,
+                'reference' => $body['order_id'],
+            ]);
+
+            return response()->json([
+                'message' => 'Payment initiated successfully.',
+                'reference' => $body['order_id'],
+                'url' => $response->json('result.url'),
+                'expired_at' => (int)$response->json('result.expired_at')
+            ]);
+        } else {
+            return response()->json([
+                'message' => 'Payment service is currently unavailable.'
+            ], JsonResponse::HTTP_SERVICE_UNAVAILABLE);
+        }
+    }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreOrderRequest $request, $type, PlatformSettings $settings)
+    public static function store(Order $order, User $user, $type, PlatformSettings $settings)
     {
-
-        // return response()->json([
-        //     'type' => $type,
-        // ]);
-        // create an order
-
-
-        $order =  Order::create([
-            'user_id' => auth()->user()->id,
-            'product_type' => $type == "one" ? 'ONE' : ($type == 'two' ? 'TWO' : 'THREE'),
-            'phase' => 1,
-            'cost' => $type ==  "one" ? $settings->product_one_price : ($type == "two" ? $settings->product_two_price : $settings->product_three_price),
-        ]);
-
-
-        // assign a product to the order
-
         if ($type == 'one') {
             // check for available product one
             $product = ProductOne::where('order_id', null)->where('mode', 'demo')->where('status', 'inactive')->first();
@@ -58,7 +94,6 @@ class OrderController extends Controller
             $productCount = ProductOne::where('order_id', null)->where('mode', 'demo')->where('status', 'inactive')->count();
 
             // check if product count is less than 10 and if it is, alert the admin
-
             if ($productCount < 10) {
                 // notify admin
                 $admin = User::where('role', 'admin')->first();
@@ -66,9 +101,7 @@ class OrderController extends Controller
             }
 
             if (!$product) {
-                return response()->json([
-                    'message' => 'No available product, a product will be assigned to you as soon as there is one available',
-                ], 400);
+                return false;
             }
 
             $product->order_id = $order->id;
@@ -81,13 +114,10 @@ class OrderController extends Controller
             $product->save();
             $order->save();
 
-            auth()->user()->notify(new ProductPurchaseNotification($product, $order));
+            $user->notify(new ProductPurchaseNotification($product, $order));
 
 
-            return response()->json([
-                'message' => 'Product assigned successfully',
-                'product' => $product,
-            ], 201);
+            return true;
         }
 
         if ($type == 'two') {
@@ -105,9 +135,7 @@ class OrderController extends Controller
             }
 
             if (!$product) {
-                return response()->json([
-                    'message' => 'No available product, a product will be assigned to you as soon as there is one available',
-                ], 400);
+                return false;
             }
 
             $product->order_id = $order->id;
@@ -120,13 +148,9 @@ class OrderController extends Controller
             $product->save();
             $order->save();
 
-            auth()->user()->notify(new ProductPurchaseNotification($product, $order));
+            $user->notify(new ProductPurchaseNotification($product, $order));
 
-
-            return response()->json([
-                'message' => 'Product assigned successfully',
-                'product' => $product,
-            ], 201);
+            return true;
         }
 
         if ($type == 'three') {
@@ -144,9 +168,7 @@ class OrderController extends Controller
             }
 
             if (!$product) {
-                return response()->json([
-                    'message' => 'No available product, a product will be assigned to you as soon as there is one available',
-                ], 400);
+                return false;
             }
         }
     }

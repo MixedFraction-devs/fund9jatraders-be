@@ -31,4 +31,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'cryptomus' => [
+        'url' => env('CRYPTOMUS_URL', 'https://api.cryptomus.com/v1/'),
+        'webhook_url' => env('CRYPTOMUS_WEBHOOK_URL'),
+        'merchant' => env('CRYPTOMUS_MERCHANT'),
+        'key' => env('CRYPTOMUS_KEY')
+    ],
 ];

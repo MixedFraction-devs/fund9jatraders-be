@@ -145,7 +145,6 @@ class UserController extends Controller
 
     public function getPlatformSettings(PlatformSettings $platformSettings)
     {
-
         return response()->json([
             'settings' => [
                 'product_one_price' => $platformSettings->product_one_price,
@@ -252,13 +251,12 @@ class UserController extends Controller
 
     public function createWithdrawalRequest()
     {
+        /**
+         * @var \App\Models\User
+         */
         $user = auth()->user();
 
-
-
-
         // check if user has bank settings setup
-
         if (!$user->bank_name || !$user->account_name || !$user->account_number) {
             return response()->json([
                 'message' => 'Please update your bank details'
