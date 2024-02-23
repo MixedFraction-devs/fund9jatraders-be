@@ -57,10 +57,7 @@ class ManageSettings extends SettingsPage
                 TextInput::make('product_three_price')->label('Product Three Price')->numeric(),
                 // ->mask(fn (TextInput\Mask $mask) => $mask->money(prefix: '₦')),
                 RichEditor::make('product_three_description')->label('Product Three Description'),
-
             ]),
-
-
         ];
     }
 }

@@ -36,7 +36,7 @@ class StatsOverview extends BaseWidget
 
             // Total order cost
 
-            Card::make('Total Sales', '₦' . $totalSales)
+            Card::make('Total Sales', '$' . $totalSales)
 
 
 
