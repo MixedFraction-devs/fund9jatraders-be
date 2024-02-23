@@ -20,6 +20,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+    );
+
+    /**
+     * Register webhook drivers
+     */
+    Webhook::driver('paystack', PaystackWebhookDriver::class);
+    Webhook::driver('zilla', ZillaWebhookDriver::class);
+
         Http::macro('cryptomus', function ($sign) {
             return Http::baseUrl(
                 config('services.cryptomus.url')
