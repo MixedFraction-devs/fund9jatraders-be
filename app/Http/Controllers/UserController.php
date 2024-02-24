@@ -95,12 +95,9 @@ class UserController extends Controller
         ]);
 
         //check if user exists
-
         $user = User::where('email', $request->email)->first();
 
         // check if user is suspended
-
-
         if (!$user) {
             return response()->json([
                 'message' => 'Invalid email or password'
@@ -164,7 +161,6 @@ class UserController extends Controller
             ]
         ], 200);
     }
-
 
     public function user()
     {
