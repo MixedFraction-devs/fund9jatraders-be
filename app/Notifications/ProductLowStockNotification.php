@@ -41,7 +41,7 @@ class ProductLowStockNotification extends Notification
             ->subject('Product Low Stock')
             ->line('Hello Admin')
             ->line($this->productType . ' is running out of stock, you have ' . $this->stock - 1 . ' left . Please restock as soon as possible to avoid errors.')
-            ->action('Go to dashboard', url('https://admin.fund9jatraders.com'));
+            ->action('Go to dashboard', url('https://admin.ForexFreeFunds.com'));
     }
 
     /**

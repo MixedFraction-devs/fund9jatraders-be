@@ -41,7 +41,7 @@ class BreachedAccountNotification extends Notification
             ->line("Dear {$notifiable->name}, Your assigned trading account {$this->product->account_number} on server {$this->product->server} was disabled for the following reason:
                 ")
             ->line("Disqualified: - 20 percent maximum allowable loss.")
-            ->line('If you have any questions, please contact us at: hi@fund9jatraders.com');
+            ->line('If you have any questions, please contact us at: hi@ForexFreeFunds.com');
     }
 
     /**

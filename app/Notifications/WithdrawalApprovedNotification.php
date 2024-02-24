@@ -52,7 +52,7 @@ class WithdrawalApprovedNotification extends Notification
             Your withdrawal request of {$this->withdrawal->amount} has been approved. This amount represent 80% pay for your trading performance.
             ")
             ->line("You will be credited within few minutes.")
-            ->line('Thanks for using Fund9jaTraders');
+            ->line('Thanks for using ForexFreeFunds');
     }
 
     /**

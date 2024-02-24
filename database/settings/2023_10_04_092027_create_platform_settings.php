@@ -7,8 +7,8 @@ return new class extends SettingsMigration
     public function up(): void
     {
 
-        $this->migrator->add('platform.site_name', 'Fund9jaTraders');
-        $this->migrator->add('platform.site_description', 'Fund9jaTraders');
+        $this->migrator->add('platform.site_name', 'ForexFreeFunds');
+        $this->migrator->add('platform.site_description', 'ForexFreeFunds');
         $this->migrator->add('platform.lock_purchases', false);
         $this->migrator->add('platform.lock_withdrawals', false);
         $this->migrator->add('platform.lock_referrals', false);

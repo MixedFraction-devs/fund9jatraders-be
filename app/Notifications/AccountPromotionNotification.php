@@ -55,8 +55,8 @@ class AccountPromotionNotification extends Notification
             ->line("Password: {$this->product->traders_password}")
             ->line("⛔ DO NOT CHANGE THIS PASSWORD OR YOU WILL BE BANNED ⛔ ")
             ->line("Leverage: {$this->product->leverage}")
-            ->line("Thanks! You are now part of Fund9jatraders")
-            ->line("If you have any questions, please contact us at: hi@fund9jatraders.com")
+            ->line("Thanks! You are now part of ForexFreeFunds")
+            ->line("If you have any questions, please contact us at: hi@ForexFreeFunds.com")
             ->line("Happy Trading!");
     }
 
