@@ -20,15 +20,15 @@ return new class extends SettingsMigration
         // product prices
 
         $this->migrator->add('platform.product_one_price', 10000);
-        $this->migrator->add('platform.product_one_title', "N1000 Challenge");
-        $this->migrator->add('platform.product_one_description', "N1000 Challenge");
+        $this->migrator->add('platform.product_one_title', "$1000 Challenge");
+        $this->migrator->add('platform.product_one_description', "$1000 Challenge");
 
         $this->migrator->add('platform.product_two_price', 20000);
-        $this->migrator->add('platform.product_two_title', "N20,000 Challenge");
-        $this->migrator->add('platform.product_two_description', "N20,000 Challenge");
+        $this->migrator->add('platform.product_two_title', "$20,000 Challenge");
+        $this->migrator->add('platform.product_two_description', "$20,000 Challenge");
 
         $this->migrator->add('platform.product_three_price', 30000);
-        $this->migrator->add('platform.product_three_title', "N30,000 Challenge");
-        $this->migrator->add('platform.product_three_description', "N30,000 Challenge");
+        $this->migrator->add('platform.product_three_title', "$30,000 Challenge");
+        $this->migrator->add('platform.product_three_description', "$30,000 Challenge");
     }
 };
