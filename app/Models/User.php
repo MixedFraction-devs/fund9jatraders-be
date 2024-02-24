@@ -26,7 +26,7 @@ class User extends Authenticatable implements Wallet, FilamentUser
 
     public function getReferralLinkAttribute()
     {
-        return $this->referral_link = 'http://localhost:3000/a/' . $this->id . '/register';
+        return $this->referral_link = 'http://localhost:3000/a/' . $this->code . '/register';
     }
 
 
@@ -84,7 +84,6 @@ class User extends Authenticatable implements Wallet, FilamentUser
 
     public function orders()
     {
-
         return $this->hasMany(Order::class);
     }
 
@@ -101,5 +100,62 @@ class User extends Authenticatable implements Wallet, FilamentUser
     public function withdrawAffiliateBalance()
     {
         return $this->withdraw($this->balance);
+    }
+
+    /**
+     * Credit the meter`s recharge balance
+     *
+     * @param int $unit
+     */
+    public function creditBalance(int $amount)
+    {
+        $tries = 1;
+        do {
+            $this->refresh();
+
+            $updated = static::whereId($this->id)->where(
+                'balance',
+                $this->getRawOriginal('balance')
+            )->update([
+                'balance' => (int)$this->getRawOriginal('balance') + $amount
+            ]);
+
+            $tries++;
+        } while (!$updated && $tries !== 10);
+
+        $this->refresh();
+        return $updated;
+    }
+
+    /**
+     * Credit the meter`s recharge balance
+     *
+     * @param int $unit
+     */
+    public function debitBalance(int $amount)
+    {
+        $tries = 1;
+        do {
+            $this->refresh();
+
+            if (!$this->balance > $amount) {
+                throw new \Exception(
+                    $this->name . '\'s do not have up to ' . round($amount / 100, 2) . ' in their wallet, try ' .  round($this->balance, 2) . '.',
+                    56643
+                );
+            }
+
+            $updated = static::whereId($this->id)->where(
+                'balance',
+                $this->getRawOriginal('balance')
+            )->update([
+                'balance' => (int)$this->getRawOriginal('balance') - $amount
+            ]);
+
+            $tries++;
+        } while (!$updated && $tries !== 10);
+
+        $this->refresh();
+        return $updated;
     }
 }

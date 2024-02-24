@@ -87,6 +87,14 @@ class OrderController extends Controller
      */
     public static function store(Order $order, User $user, $type, PlatformSettings $settings)
     {
+        /**
+         * @var User
+         */
+        $referrer = $user->referrer;
+        if ($referrer) {
+            $referrer->creditBalance((int)$order->cost * 0.05);
+        }
+
         if ($type == 'one') {
             // check for available product one
             $product = ProductOne::where('order_id', null)->where('mode', 'demo')->where('status', 'inactive')->first();

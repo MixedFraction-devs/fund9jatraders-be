@@ -40,10 +40,7 @@ Route::middleware('auth:sanctum')->prefix('user')->group(function () {
     Route::post('/withdrawal-request', [UserController::class, 'createWithdrawalRequest']);
 });
 
-// Route::get
-
 // order controller
-
 Route::middleware('auth:sanctum')->prefix('orders')->group(function () {
     Route::get('/', [OrderController::class, 'index']);
     Route::post('cryptomus/{type}', [OrderController::class, 'cryptomus'])->whereIn('type', ['one', 'two', 'three']);

@@ -16,6 +16,7 @@ class Order extends Model
     protected $guarded = [];
     protected $casts = [
         'breached_at' => 'datetime',
+        'cost' => 'integer',
     ];
     protected $fillables = [
         'user_id',

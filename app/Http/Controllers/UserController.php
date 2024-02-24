@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Mail\VerifyOTP;
 use App\Models\User;
 use App\Notifications\WelcomeUserNotification;
+use App\Services\Utils;
 use App\Settings\PlatformSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,15 +29,13 @@ class UserController extends Controller
         ]);
 
         //check OTP
-
         if ($this->checkOtp($request->email, $request->otp)) {
             return response()->json([
                 'message' => 'Invalid OTP'
             ], 401);
         }
 
-        $referral_id = $request->referral_id;
-
+        $referral = User::whereCode($request->referral)->first();
 
         $user = User::create([
             'name' => $request->name,
@@ -44,7 +43,8 @@ class UserController extends Controller
             'address_city' => $request->address_city,
             'address_state' => $request->address_state,
             'password' => $request->password,
-            'referrer_id' => $referral_id,
+            'referrer_id' => $referral?->id,
+            'code' => static::generateSafeUserCode(),
         ]);
 
         $user->notify(new WelcomeUserNotification());
@@ -69,11 +69,8 @@ class UserController extends Controller
 
         $otp = Otp::digits(4)->generate($request->email);
 
-
         // Send email to user
-
         Mail::to($request->email)->send(new VerifyOTP($otp));
-        //   });
 
         return response()->json([
             'message' => 'OTP successfully sent to email',
@@ -278,5 +275,17 @@ class UserController extends Controller
             'account_name' => $user->account_name,
             'affiliate_amount' => $user->balance,
         ]);
+    }
+
+    public static function generateSafeUserCode()
+    {
+        do {
+            $exist = User::where(
+                'code',
+                $code = Utils::random(5, false, true) . Utils::random(5, false, true, true)
+            )->count('id') > 0;
+        } while ($exist);
+
+        return $code;
     }
 }
