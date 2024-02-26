@@ -40,8 +40,6 @@ class User extends Authenticatable implements Wallet, FilamentUser
         return $this->hasMany(User::class, 'referrer_id', 'id');
     }
 
-
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -99,7 +97,7 @@ class User extends Authenticatable implements Wallet, FilamentUser
 
     public function withdrawAffiliateBalance()
     {
-        return $this->withdraw($this->balance);
+        return $this->debitBalance($this->amount);
     }
 
     /**
@@ -114,10 +112,10 @@ class User extends Authenticatable implements Wallet, FilamentUser
             $this->refresh();
 
             $updated = static::whereId($this->id)->where(
-                'balance',
-                $this->getRawOriginal('balance')
+                'amount',
+                $this->getRawOriginal('amount')
             )->update([
-                'balance' => (int)$this->getRawOriginal('balance') + $amount
+                'amount' => (int)$this->getRawOriginal('amount') + $amount
             ]);
 
             $tries++;
@@ -138,18 +136,18 @@ class User extends Authenticatable implements Wallet, FilamentUser
         do {
             $this->refresh();
 
-            if (!$this->balance > $amount) {
+            if (!$this->amount > $amount) {
                 throw new \Exception(
-                    $this->name . '\'s do not have up to ' . round($amount / 100, 2) . ' in their wallet, try ' .  round($this->balance, 2) . '.',
+                    $this->name . '\'s does not have up to ' . round($amount / 100, 2) . ' in their wallet, try ' .  round($this->balance, 2) . '.',
                     56643
                 );
             }
 
             $updated = static::whereId($this->id)->where(
-                'balance',
-                $this->getRawOriginal('balance')
+                'amount',
+                $this->getRawOriginal('amount')
             )->update([
-                'balance' => (int)$this->getRawOriginal('balance') - $amount
+                'amount' => (int)$this->getRawOriginal('amount') - $amount
             ]);
 
             $tries++;

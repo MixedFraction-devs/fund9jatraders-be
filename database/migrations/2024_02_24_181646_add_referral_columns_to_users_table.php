@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('users', function (Blueprint $table) {
             $table->string('code')->unique()->nullable();
-            $table->unsignedBigInteger('balance')->default(0);
+            $table->unsignedBigInteger('amount')->default(0);
         });
     }
 
