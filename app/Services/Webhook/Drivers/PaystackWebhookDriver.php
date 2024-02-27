@@ -4,15 +4,12 @@ namespace App\Services\Webhook\Drivers;
 
 use App\Http\Controllers\OrderController;
 use App\Models\Order;
-use App\Models\Transaction;
 use App\Models\User;
-use App\Notifications\WalletFunded;
 use App\Settings\PlatformSettings;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
-use Walletable\Money\Money;
 
 class PaystackWebhookDriver implements WebhookInterface
 {
@@ -45,7 +42,7 @@ class PaystackWebhookDriver implements WebhookInterface
     public function process(Request $request, array $data, string $raw): Response
     {
         if (data_get($data, 'event') === 'charge.success' && !is_null(data_get($data, 'data.metadata.type'))) {
-            $reference = data_get($data, 'data.reference');
+            //$reference = data_get($data, 'data.reference');
             $email = data_get($data, 'data.customer.email');
             $type = data_get($data, 'data.metadata.type');
             /**
@@ -62,12 +59,12 @@ class PaystackWebhookDriver implements WebhookInterface
                 try {
                     DB::beginTransaction();
                     $order =  Order::create([
-                        'user_id' => auth()->user()->id,
-                        'product_type' => $data['type'] == "one" ? 'ONE' : ($data['type'] == 'two' ? 'TWO' : 'THREE'),
+                        'user_id' => $user->id,
+                        'product_type' => $type == "one" ? 'ONE' : ($type == 'two' ? 'TWO' : 'THREE'),
                         'phase' => 1,
-                        'cost' => $data['type'] ==  "one" ? $settings->product_one_price : ($data['type'] == "two" ? $settings->product_two_price : $settings->product_three_price),
+                        'cost' => $type ==  "one" ? $settings->product_one_price : ($type == "two" ? $settings->product_two_price : $settings->product_three_price),
                     ]);
-                    OrderController::store($order, $user, $settings, $data['type']);
+                    OrderController::store($order, $user, $settings, $type);
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
