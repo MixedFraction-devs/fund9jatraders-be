@@ -30,6 +30,10 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'paystack' => [
+        'secret' => env('PAYSTACK_SECRET'),
+        'public' => env('PAYSTACK_PUBLIC'),
+    ],
 
     'cryptomus' => [
         'url' => env('CRYPTOMUS_URL', 'https://api.cryptomus.com/v1/'),
