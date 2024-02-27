@@ -70,6 +70,7 @@ class CryptomusWebhookDriver implements WebhookInterface
                         'cost' => $store['type'] ==  "one" ? $settings->product_one_price : ($store['type'] == "two" ? $settings->product_two_price : $settings->product_three_price),
                     ]);
                     OrderController::store($order, $user, $settings, $store['type']);
+                    Cache::store('database')->delete('cryptomus-' . $reference);
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
