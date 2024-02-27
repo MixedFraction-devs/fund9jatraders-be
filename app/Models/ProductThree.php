@@ -48,7 +48,7 @@ class ProductThree extends Model
 
                 Notification::make()
                     ->success()
-                    ->title('Product created and assigned to {$order->user->name}')
+                    ->title('Product created and assigned to ' . $order->user->name)
                     ->send();
             }
 
