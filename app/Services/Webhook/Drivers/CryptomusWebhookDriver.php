@@ -56,7 +56,6 @@ class CryptomusWebhookDriver implements WebhookInterface
 
             if (Cache::store('database')->has('cryptomus-' . $reference)) {
                 $store = Cache::store('database')->get('cryptomus-' . $reference);
-
                 /**
                  * @var User
                  */
