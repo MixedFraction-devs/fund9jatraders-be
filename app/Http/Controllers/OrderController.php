@@ -16,7 +16,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class OrderController extends Controller
 {
@@ -85,7 +84,7 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public static function store(Order $order, User $user, $type, PlatformSettings $settings)
+    public static function store(Order $order, User $user, PlatformSettings $settings, $type)
     {
         /**
          * @var User
