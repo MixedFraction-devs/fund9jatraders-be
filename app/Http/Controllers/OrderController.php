@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\ProductOne;
 use App\Models\ProductThree;
@@ -112,7 +111,7 @@ class OrderController extends Controller
             }
 
             $product->order_id = $order->id;
-            $product->user_id = auth()->user()->id;
+            $product->user_id = $user->id;
             $product->save();
 
             $order->product_id = $product->id;
@@ -146,7 +145,7 @@ class OrderController extends Controller
             }
 
             $product->order_id = $order->id;
-            $product->user_id = auth()->user()->id;
+            $product->user_id = $user->id;
             $product->save();
 
             $order->product_id = $product->id;
