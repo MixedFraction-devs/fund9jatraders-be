@@ -55,15 +55,15 @@ class UserResource extends Resource
                 Forms\Components\TextInput::make('phone_number')
                     ->tel()
                     ->maxLength(255),
-                Forms\Components\TextInput::make('address_city')
+                Forms\Components\TextInput::make('address_country')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('address_state')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('bank_name')
+                Forms\Components\TextInput::make("crypto_network")
                     ->maxLength(255),
-                Forms\Components\TextInput::make('account_number')
+                Forms\Components\TextInput::make('crypto_type')
                     ->maxLength(255),
-                Forms\Components\TextInput::make('account_name')
+                Forms\Components\TextInput::make("crypto_wallet_address")
                     ->maxLength(255),
                 // Forms\Components\TextInput::make('password')
                 //     ->password()
@@ -98,11 +98,11 @@ class UserResource extends Resource
                 // Tables\Columns\TextColumn::make('email_verified_at')
                 //     ->dateTime(),
                 Tables\Columns\TextColumn::make('phone_number'),
-                Tables\Columns\TextColumn::make('address_city'),
+                Tables\Columns\TextColumn::make('address_country'),
                 Tables\Columns\TextColumn::make('address_state'),
-                Tables\Columns\TextColumn::make('bank_name'),
-                Tables\Columns\TextColumn::make('account_number'),
-                Tables\Columns\TextColumn::make('account_name'),
+                Tables\Columns\TextColumn::make("crypto_network"),
+                Tables\Columns\TextColumn::make("crypto_type"),
+                Tables\Columns\TextColumn::make("crypto_wallet_address"),
                 Tables\Columns\TextColumn::make('role'),
                 Tables\Columns\TextColumn::make('status')->icon(fn (User $record) => match ($record->status) {
                     'active' => 'heroicon-o-check-circle',

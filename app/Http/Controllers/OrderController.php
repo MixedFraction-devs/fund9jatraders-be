@@ -83,7 +83,7 @@ class OrderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public static function store(Order $order, User $user, PlatformSettings $settings, $type)
+    public static function store(Order $order, User $user, string $type)
     {
         /**
          * @var User

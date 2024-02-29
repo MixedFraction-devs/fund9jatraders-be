@@ -23,8 +23,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-            // 'address_city' => 'required|string',
-            // 'address_state' => 'required|string',
+
             'password' => 'required|string|min:8',
         ]);
 
@@ -40,7 +39,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'address_city' => $request->address_city,
+            'address_country' => $request->address_country,
             'address_state' => $request->address_state,
             'password' => $request->password,
             'referrer_id' => $referral?->id,
@@ -178,17 +177,17 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'bank_name' => 'required|string|min:3|max:50',
-            'account_name' => 'required|string|min:5|max:50',
-            'account_number' => 'required|min:10|max:10',
+            'crypto_type' => 'required|string|min:3|max:50',
+            'crypto_network' => 'required|string|min:5|max:50',
+            'crypto_wallet_address' => 'required|min:10|max:10',
         ]);
         $user = auth()->user();
 
 
         $user->update([
-            'bank_name' => $request->bank_name,
-            'account_name' => $request->account_name,
-            'account_number' => $request->account_number,
+            'crypto_type' => $request->crypto_type,
+            'crypto_network' => $request->crypto_network,
+            'crypto_wallet_address' => $request->crypto_wallet_address,
         ]);
 
         return response()->json([
@@ -200,13 +199,13 @@ class UserController extends Controller
     public function updateAddress(Request $request)
     {
         $request->validate([
-            'address_city' => 'required|string|min:5',
+            'address_country' => 'required|string|min:5',
             'address_state' => 'required|string|min:5',
         ]);
         $user = auth()->user();
 
         $user->update([
-            'address_city' => $request->address_city,
+            'address_country' => $request->address_country,
             'address_state' => $request->address_state,
         ]);
 
@@ -249,7 +248,7 @@ class UserController extends Controller
         $user = auth()->user();
 
         // check if user has bank settings setup
-        if (!$user->bank_name || !$user->account_name || !$user->account_number) {
+        if (!$user->crypto_type || !$user->crypto_network || !$user->crypto_wallet_address) {
             return response()->json([
                 'message' => 'Please update your bank details'
             ], 401);
@@ -265,9 +264,9 @@ class UserController extends Controller
         // create  withdrawal request
 
         $withdrawal_request = $user->withdrawalRequests()->create([
-            'bank_name' => $user->bank_name,
-            'account_number' => $user->account_number,
-            'account_name' => $user->account_name,
+            'crypto_type' => $user->crypto_type,
+            'crypto_wallet_address' => $user->crypto_wallet_address,
+            'crypto_network' => $user->crypto_network,
             'affiliate_amount' => $user->balance,
         ]);
     }

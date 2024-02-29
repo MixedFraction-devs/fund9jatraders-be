@@ -15,9 +15,9 @@ return new class extends Migration
     {
         Schema::create('withdrawal_requests', function (Blueprint $table) {
             $table->id();
-            $table->string('bank_name');
-            $table->string('account_number');
-            $table->string('account_name');
+            $table->string("crypto_type")->nullable();
+            $table->string("crypto_wallet_address")->nullable();
+            $table->string("crypto_network")->nullable();
             $table->integer('amount')->nullable();
             $table->integer("affiliate_amount")->nullable();
             $table->string('status')->default('pending');

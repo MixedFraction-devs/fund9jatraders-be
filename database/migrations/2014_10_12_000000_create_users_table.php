@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string("phone_number")->nullable();
-            $table->string("address_city")->nullable();
+            $table->string("address_country")->nullable();
             $table->string("address_state")->nullable();
-            $table->string("bank_name")->nullable();
-            $table->string("account_number")->nullable();
-            $table->string("account_name")->nullable();
+            $table->string("crypto_type")->nullable();
+            $table->string("crypto_wallet_address")->nullable();
+            $table->string("crypto_network")->nullable();
             $table->foreignId('referrer_id')->nullable()->constrained('users');
             $table->string('password');
             $table->rememberToken();

@@ -20,10 +20,9 @@ class DatabaseSeeder extends Seeder
             'password' => 'password',
             'phone_number' => '08106924812',
             'role' => 'admin',
-            'address_city' => 'Ikeja',
-            'address_state' => 'Lagos',
-            'bank_name' => 'GTBank',
-            'account_number' => '0123456789',
+            'address_country' => 'California',
+            'address_state' => 'United States',
+            'code' => '123456',
         ]);
 
         \App\Models\ProductOne::factory(20)->create();
