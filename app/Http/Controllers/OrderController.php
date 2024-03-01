@@ -48,7 +48,7 @@ class OrderController extends Controller
 
         $body = [
             'order_id' => Str::uuid(),
-            'amount' => round($amount / 100, 2),
+            'amount' => (string)round($amount / 100, 2),
             'currency' => 'USD',
             'subtract' => 100,
             'url_callback' => config('services.cryptomus.webhook_url')
