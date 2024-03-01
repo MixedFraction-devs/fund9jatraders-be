@@ -64,7 +64,7 @@ class PaystackWebhookDriver implements WebhookInterface
                         'phase' => 1,
                         'cost' => $type ==  "one" ? $settings->product_one_price : ($type == "two" ? $settings->product_two_price : $settings->product_three_price),
                     ]);
-                    OrderController::store($order, $user, $settings, $type);
+                    OrderController::store($order, $user, $type);
                     DB::commit();
                 } catch (\Throwable $th) {
                     DB::rollBack();
