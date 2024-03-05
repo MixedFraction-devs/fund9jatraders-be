@@ -177,9 +177,9 @@ class UserController extends Controller
     {
 
         $request->validate([
-            'crypto_type' => 'required|string|min:3|max:50',
-            'crypto_network' => 'required|string|min:5|max:50',
-            'crypto_wallet_address' => 'required|min:10|max:10',
+            'crypto_type' => 'required|string|min:3|max:20',
+            'crypto_network' => 'required|string|min:5|max:20',
+            'crypto_wallet_address' => 'required|min:10|max:100',
         ]);
         $user = auth()->user();
 
