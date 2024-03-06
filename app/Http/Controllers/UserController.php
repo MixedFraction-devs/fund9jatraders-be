@@ -199,7 +199,7 @@ class UserController extends Controller
     public function updateAddress(Request $request)
     {
         $request->validate([
-            'address_country' => 'required|string|min:5',
+            'address_country' => 'required|string|min:2',
             'address_state' => 'required|string|min:5',
         ]);
         $user = auth()->user();
