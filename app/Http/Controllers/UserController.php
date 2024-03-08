@@ -276,7 +276,7 @@ class UserController extends Controller
         do {
             $exist = User::where(
                 'code',
-                $code = Utils::random(5, false, true) . Utils::random(5, false, true, true)
+                $code = Utils::random(2, false, true) . Utils::random(3, false, true, true)
             )->count('id') > 0;
         } while ($exist);
 
