@@ -364,4 +364,16 @@ class UserController extends Controller
 
         return $code;
     }
+
+    // get all afiliate referrals
+    public function getMyReferrals()
+    {
+        $user = auth()->user();
+        $referrals = $user->referrals()->get();
+        return response()->json([
+            'referrals' => $referrals
+        ], 200);
+    }
+    // get all affiliate referrals
+
 }

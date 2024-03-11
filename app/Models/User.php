@@ -22,13 +22,12 @@ class User extends Authenticatable implements Wallet, FilamentUser
      * @var array<int, string>
      */
     protected $guarded = [];
-    // protected $appends = ['referral_link'];
+    protected $appends = ['referral_link'];
 
     public function getReferralLinkAttribute()
     {
         return $this->referral_link = 'http://localhost:3000/a/' . $this->code . '/register';
     }
-
 
     public function referrer()
     {
@@ -126,7 +125,7 @@ class User extends Authenticatable implements Wallet, FilamentUser
     }
 
     /**
-     * Credit the meter`s recharge balance
+     * debit the users balance
      *
      * @param int $unit
      */
@@ -156,4 +155,12 @@ class User extends Authenticatable implements Wallet, FilamentUser
         $this->refresh();
         return $updated;
     }
+
+    // show the users wallet balance as an attribute
+
+    /**
+     * Get the user's wallet balance.
+     *
+     * @return int
+     */
 }
