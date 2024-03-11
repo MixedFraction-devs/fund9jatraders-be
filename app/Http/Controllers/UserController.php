@@ -328,9 +328,9 @@ class UserController extends Controller
         }
 
         // check if the user has a product that is in phase 3
-        if ($user->orders()->where('phase', 3)->count() == 0) {
+        if ($user->orders()->where('phase', 3)->whereNull("breached_at")->count() == 0) {
             return response()->json([
-                'message' => 'You need to have a product that is in phase 3 to withdraw'
+                'message' => 'You need to have a product that is at least in phase 3 to withdraw'
             ], 401);
         }
 
