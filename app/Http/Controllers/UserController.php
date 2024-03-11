@@ -262,7 +262,7 @@ class UserController extends Controller
         ]);
 
         return response()->json([
-            'message' => 'Bank details updated successfully',
+            'message' => 'Payout details updated successfully',
             'user' => $user
         ], 200);
     }
@@ -318,10 +318,19 @@ class UserController extends Controller
          */
         $user = auth()->user();
 
+
+
         // check if user has bank settings setup
         if (!$user->crypto_type || !$user->crypto_network || !$user->crypto_wallet_address) {
             return response()->json([
                 'message' => 'Please update your bank details'
+            ], 401);
+        }
+
+        // check if the user has a product that is in phase 3
+        if ($user->orders()->where('phase', 3)->count() == 0) {
+            return response()->json([
+                'message' => 'You need to have a product that is in phase 3 to withdraw'
             ], 401);
         }
 

@@ -22,11 +22,10 @@ class User extends Authenticatable implements Wallet, FilamentUser
      * @var array<int, string>
      */
     protected $guarded = [];
-    protected $appends = ['referral_link'];
 
     public function getReferralLinkAttribute()
     {
-        return $this->referral_link = 'http://localhost:3000/a/' . $this->code . '/register';
+        return $this->referral_link = 'https://app.forexfreefunds.com/auth/register/' . $this->code;
     }
 
     public function referrer()
@@ -155,6 +154,10 @@ class User extends Authenticatable implements Wallet, FilamentUser
         $this->refresh();
         return $updated;
     }
+    // append users referral link
+
+    // protected $appends = ['referral_link'];
+
 
     // show the users wallet balance as an attribute
 
