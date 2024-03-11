@@ -342,6 +342,17 @@ class UserController extends Controller
         ]);
     }
 
+    public function getWithdrawls()
+    {
+        $user = auth()->user();
+
+        $withdrawals = $user->withdrawalRequests()->get();
+
+        return response()->json([
+            'withdrawals' => $withdrawals
+        ], 200);
+    }
+
     public static function generateSafeUserCode()
     {
         do {

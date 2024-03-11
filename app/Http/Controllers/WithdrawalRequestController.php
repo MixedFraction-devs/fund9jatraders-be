@@ -13,7 +13,6 @@ class WithdrawalRequestController extends Controller
      */
     public function index()
     {
-        //
     }
 
     /**

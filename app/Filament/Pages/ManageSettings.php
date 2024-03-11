@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Models\User;
 use App\Settings\PlatformSettings;
 use Filament\Forms;
 use Filament\Forms\Components\Card;
@@ -9,6 +10,7 @@ use Filament\Forms\Components\MarkdownEditor;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Pages\Actions\Action;
 use Filament\Pages\SettingsPage;
 
 class ManageSettings extends SettingsPage
@@ -59,5 +61,126 @@ class ManageSettings extends SettingsPage
                 RichEditor::make('product_three_description')->label('Product Three Description'),
             ]),
         ];
+    }
+
+    protected function getActions(): array
+    {
+        return [
+
+            Action::make('downloadAllEmails')->action('exportAllEmails')->color('primary')->label('Download All Emails'),
+            Action::make('downloadActiveEmails')->action('exportActiveEmails')->color("primary")->label('Download Active Emails'),
+            Action::make('downloadInactiveEmails')->action('exportInactiveEmails')->color("primary")->label('Download Inactive Emails'),
+
+
+
+        ];
+    }
+
+    public function exportAllEmails()
+    {
+
+        $reports = User::all();
+        $rows = [];
+        foreach ($reports as $key => $value) {
+            $rows[$key]['id'] = $value->id;
+            $rows[$key]['name'] = $value->name;
+            $rows[$key]['email'] = $value->email;
+        }
+
+        $fileName = 'file.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=" . $fileName,
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columnNames = [
+            'ID',
+            'name',
+            'email'
+        ];
+        $callback = function () use ($columnNames, $rows) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columnNames);
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
+
+    //export user emails where status is active
+    public function exportActiveEmails()
+    {
+        $reports = User::where('status', 'active')->get();
+        $rows = [];
+        foreach ($reports as $key => $value) {
+            $rows[$key]['id'] = $value->id;
+            $rows[$key]['name'] = $value->name;
+            $rows[$key]['email'] = $value->email;
+        }
+
+        $fileName = 'file.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=" . $fileName,
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columnNames = [
+            'ID',
+            'name',
+            'email'
+        ];
+        $callback = function () use ($columnNames, $rows) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columnNames);
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
+    }
+
+    //export user emails where status is inactive
+    public function exportInactiveEmails()
+    {
+        $reports = User::where('status', 'inactive')->orWhere('status', 'suspended')->get();
+        $rows = [];
+        foreach ($reports as $key => $value) {
+            $rows[$key]['id'] = $value->id;
+            $rows[$key]['name'] = $value->name;
+            $rows[$key]['email'] = $value->email;
+        }
+
+        $fileName = 'file.csv';
+        $headers = [
+            "Content-type" => "text/csv",
+            "Content-Disposition" => "attachment; filename=" . $fileName,
+            "Pragma" => "no-cache",
+            "Cache-Control" => "must-revalidate, post-check=0, pre-check=0",
+            "Expires" => "0"
+        ];
+
+        $columnNames = [
+            'ID',
+            'name',
+            'email'
+        ];
+        $callback = function () use ($columnNames, $rows) {
+            $file = fopen('php://output', 'w');
+            fputcsv($file, $columnNames);
+            foreach ($rows as $row) {
+                fputcsv($file, $row);
+            }
+            fclose($file);
+        };
+        return response()->stream($callback, 200, $headers);
     }
 }
