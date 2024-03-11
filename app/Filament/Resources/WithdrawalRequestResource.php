@@ -8,6 +8,7 @@ use App\Models\WithdrawalRequest;
 use App\Notifications\WithdrawalApprovedNotification;
 use App\Notifications\WithdrawalRejectedNotification;
 use Filament\Forms;
+use Filament\Forms\Components\Tabs\Tab;
 use Filament\Notifications\Actions\ActionGroup;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -57,10 +58,12 @@ class WithdrawalRequestResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('user.name'),
-                Tables\Columns\TextColumn::make('bank_name'),
-                Tables\Columns\TextColumn::make('account_number'),
-                Tables\Columns\TextColumn::make('account_name'),
+                Tables\Columns\TextColumn::make('user.name')->searchable(),
+                //affiliate amount
+                Tables\Columns\TextColumn::make('affiliate_amount')->sortable(),
+                Tables\Columns\TextColumn::make('crypto_type')->searchable(),
+                Tables\Columns\TextColumn::make('crypto_wallet_address')->copyable(),
+                Tables\Columns\TextColumn::make('crypto_network')->sortable(),
                 // Tables\Columns\TextColumn::make('bank_code'),
                 Tables\Columns\TextColumn::make('amount'),
                 Tables\Columns\TextColumn::make('status')->color(fn (WithdrawalRequest $record) => match ($record->status) {

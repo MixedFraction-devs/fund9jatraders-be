@@ -25,10 +25,14 @@ class DatabaseSeeder extends Seeder
             'code' => '123456',
         ]);
 
+
         \App\Models\ProductOne::factory(20)->create();
         \App\Models\ProductTwo::factory(20)->create();
         \App\Models\ProductThree::factory(20)->create();
 
         \App\Models\Order::factory(20)->create();
+        //Withdrawal factory
+
+        \App\Models\WithdrawalRequest::factory(20)->create();
     }
 }
