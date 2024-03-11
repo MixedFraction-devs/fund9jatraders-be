@@ -17,7 +17,11 @@ class OrderFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'user_id' => \App\Models\User::factory(),
+            'product_type' => $this->faker->randomElement(['ONE', 'TWO', 'THREE']),
+            'cost' => $this->faker->randomNumber(4),
+            'phase' => $this->faker->randomElement([1, 2, 3, 4]),
+            'breached_at' => $this->faker->randomElement([null, $this->faker->dateTimeThisYear()])
         ];
     }
 }

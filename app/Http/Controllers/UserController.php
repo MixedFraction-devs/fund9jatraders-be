@@ -130,6 +130,77 @@ class UserController extends Controller
 
     //reset password
 
+    public function requestPasswordReset(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Account not found'
+            ], 404);
+        }
+
+        $otp = Otp::digits(4)->generate($request->email);
+
+        // Send email to user
+        Mail::to($request->email)->send(new VerifyOTP($otp));
+
+        return response()->json([
+            'message' => 'OTP successfully sent to email',
+            // 'otp' => $otp
+        ], 200);
+    }
+
+    // verify OTP
+
+    public function verifyOtp(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'otp' => 'required|string|min:4|max:4'
+        ]);
+
+        if ($this->checkOtp($request->email, $request->otp)) {
+            return response()->json([
+                'message' => 'Invalid OTP'
+            ], 401);
+        }
+
+        return response()->json([
+            'message' => 'OTP verified successfully'
+        ], 200);
+    }
+
+    // update password
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required|string|min:8'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Account not found'
+            ], 404);
+        }
+
+        $user->update([
+            'password' => $request->password
+        ]);
+
+        return response()->json([
+            'message' => 'Password updated successfully'
+        ], 200);
+    }
+
     //update profile
 
     // register with referral

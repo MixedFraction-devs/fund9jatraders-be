@@ -63,7 +63,7 @@ class OrderResource extends Resource
                     'ONE' =>  app(PlatformSettings::class)->product_one_title,
                     'TWO' => app(PlatformSettings::class)->product_two_title,
                     'THREE' => app(PlatformSettings::class)->product_three_title,
-                }),
+                })->searchable()->label("Product"),
                 // Tables\Columns\TextColumn::make('product_id'),
                 Tables\Columns\TextColumn::make('cost'),
                 Tables\Columns\TextColumn::make('phase'),

@@ -17,7 +17,7 @@ class ProductOneOverview extends BaseWidget
         return [
             Card::make('Remaining Stock', ProductOne::where('status', 'inactive')->count())->description("All accounts remaining"),
             Card::make('Demo Stock', ProductOne::where('status', 'inactive')->where('mode', 'demo')->count())->description("All Demo accounts remaining"),
-            Card::make('Product 1 Orders', ProductOne::whereNot('status', 'inactive')->count())->description('All active accounts that have been purchased'),
+            Card::make('Product 1 Orders', ProductOne::whereNotNull('purchased_at')->count())->description('All active accounts that have been purchased'),
             Card::make('Product 1 Breached', ProductOne::where('status', 'breached')->count())->description('All accounts that have been breached'),
             Card::make('Product 1 Passed', ProductOne::where('status', 'passed')->count())->description('All accounts that have been passed'),
             Card::make('Product 1 Real Promoted', ProductOne::whereNotNull('is_assigned')->where('mode', 'real')->count())->description('Real accounts that have been promoted'),

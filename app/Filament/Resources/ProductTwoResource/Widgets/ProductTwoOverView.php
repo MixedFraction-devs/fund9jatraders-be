@@ -16,7 +16,7 @@ class ProductTwoOverView extends BaseWidget
         return [
             Card::make('Remaining Stock', ProductTwo::where('status', 'inactive')->count())->description("All accounts remaining"),
             Card::make('Demo Stock', ProductTwo::where('status', 'inactive')->where('mode', 'demo')->count())->description("All Demo accounts remaining"),
-            Card::make('Product 2 Orders', ProductTwo::whereNot('status', 'inactive')->count())->description('All active accounts that have been purchased'),
+            Card::make('Product 2 Orders', ProductTwo::whereNotNull('purchased_at')->count())->description('All active accounts that have been purchased'),
             Card::make('Product 2 Breached', ProductTwo::where('status', 'breached')->count())->description('All accounts that have been breached'),
             Card::make('Product 2 Passed', ProductTwo::where('status', 'passed')->count())->description('All accounts that have been passed'),
             Card::make('Product 2 Real Promoted', ProductTwo::whereNotNull('is_assigned')->where('mode', 'real')->count())->description('Real accounts that have been promoted'),
