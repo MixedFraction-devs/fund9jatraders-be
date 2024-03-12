@@ -27,7 +27,7 @@ class UserController extends Controller
         ]);
 
         //check OTP
-        if (!$this->checkOtp($request->email, $request->otp)) {
+        if (!$this->checkOtp($request->otp, $request->email)) {
             return response()->json([
                 'message' => 'Invalid OTP'
             ], 401);
