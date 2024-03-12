@@ -75,7 +75,7 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function checkOtp($email, $otp)
+    public function checkOtp($otp, $email)
     {
         return Otp::digits(4)->check($otp, $email);
     }
@@ -162,7 +162,7 @@ class UserController extends Controller
             'otp' => 'required|string|min:4|max:4'
         ]);
 
-        if (!$this->checkOtp($request->email, $request->otp)) {
+        if (!$this->checkOtp($request->otp, $request->email)) {
             return response()->json([
                 'message' => 'Invalid OTP'
             ], 401);

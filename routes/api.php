@@ -26,6 +26,10 @@ Route::prefix('auth')->group(function () {
     Route::post('login', [UserController::class, 'login']);
 
     Route::post('get-otp', [UserController::class, 'getEmailOtp']);
+
+    // reset password routes
+
+    // Route::post('reset-password', [UserController::class, 'resetPassword']);
 });
 
 
