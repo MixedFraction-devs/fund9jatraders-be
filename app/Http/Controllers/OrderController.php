@@ -90,7 +90,7 @@ class OrderController extends Controller
          */
         $referrer = $user->referrer;
         if ($referrer) {
-            $referrer->creditBalance((int)$order->cost * 0.05);
+            $referrer->creditBalance((int)$order->cost * 0.20);
         }
 
         if ($type == 'one') {

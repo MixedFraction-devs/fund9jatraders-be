@@ -23,19 +23,17 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users,email',
-
             'password' => 'required|string|min:8',
         ]);
 
         //check OTP
-        if ($this->checkOtp($request->email, $request->otp)) {
+        if (!$this->checkOtp($request->email, $request->otp)) {
             return response()->json([
                 'message' => 'Invalid OTP'
             ], 401);
         }
 
         $referral = User::whereCode($request->referral)->first();
-
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
@@ -164,7 +162,7 @@ class UserController extends Controller
             'otp' => 'required|string|min:4|max:4'
         ]);
 
-        if ($this->checkOtp($request->email, $request->otp)) {
+        if (!$this->checkOtp($request->email, $request->otp)) {
             return response()->json([
                 'message' => 'Invalid OTP'
             ], 401);
